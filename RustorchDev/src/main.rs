@@ -1,3 +1,8 @@
+mod test;
+mod layers;
+mod testsys;
+use testsys::test_sys;
+
 fn main() {
-    println!("Hello, world!");
+    test_sys();
 }
