@@ -21,8 +21,12 @@ impl Softmax
         let mut res=x.dot(&self.w);
         res[[4,4]]=22.0;
         res[[5,2]]=49.0;
-        let res_max=func_add::get_max_axis1(res);
-        print!("{:#?}",res_max);
+        let res_max=func_add::get_max_axis1(&res); 
+        //print!("{:#?}",res_max);
+        let res_reduce=res-&res_max;
+        print!("{:#?}",res_reduce);
+        let res_e=func_add::get_exp1(&res_reduce);
+        println!("{:#?}",res_e);
         0.2
     }
 

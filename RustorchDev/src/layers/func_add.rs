@@ -1,5 +1,6 @@
 use ndarray::prelude::*;
-pub fn get_max_axis1(res:Array2<f64>)->Array2<f64>
+//输入一个矩阵，求出每行最大值
+pub fn get_max_axis1(res:&Array2<f64>)->Array2<f64>
     {
         let shape_info=res.dim();
         
@@ -35,3 +36,22 @@ pub fn get_max_axis1(res:Array2<f64>)->Array2<f64>
 
         max_res
     }
+
+
+//输入一个矩阵，求该矩阵每一个元素的e的指数
+pub fn get_exp1(res:&Array2<f64>)->Array2<f64>
+{
+    let row_num;
+    let col_num;
+    (row_num,col_num)=res.dim();
+    let mut res_e=Array::zeros((row_num as usize,col_num as usize));
+    for i in 0..row_num
+    {
+        for j in 0..col_num
+        {
+            res_e[[i,j]]=res[[i,j]].exp()
+        }
+
+    }
+    res_e
+}
