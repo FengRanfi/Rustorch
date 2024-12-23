@@ -4,7 +4,7 @@ use ndarray::prelude::*;
 
 pub fn test_shape()
 {   
-    let temp_softmax=Softmax::new(4,5);
+    let temp_softmax=Softmax::new(4,5,0.1);
     println!("{:#?}",temp_softmax);
 }
 
@@ -13,10 +13,24 @@ pub fn test_get_max()
     let w=4;
     let h=5;
     let n=10;
-    let output=10;
-    let temp_softmax=Softmax::new(w,h);
+    let output=1;
+    let mut temp_softmax=Softmax::new(w,h,0.0);
     let x= Array::zeros((n as usize,w as usize));
     let y= Array::zeros((n as usize,output as usize));
-    temp_softmax.loss(x,y);
+    println!("{:#?}",temp_softmax.loss(&x, &y));
+    if let Some((tdw,tdx))=temp_softmax.back()
+    {
+        println!("{:#?}",tdw);
+        println!("{:#?}",tdx);
+    }
+    else 
+    {
+        println!("梯度为空");
+    }
+}
+
+pub fn train_softmax_model()
+{
+    let lr=1e-4;
 
 }
