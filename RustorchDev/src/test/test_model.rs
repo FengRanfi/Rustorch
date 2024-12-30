@@ -30,6 +30,7 @@ pub fn get_train_data()//->Option<(Array2<f64>, Array2<f64>)>
         {
             if i==99
             {
+                println!("e打印结果为:");
                 temp_softmax.printw();
             }
         }
