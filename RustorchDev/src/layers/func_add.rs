@@ -55,3 +55,33 @@ pub fn get_exp1(res:&Array2<f64>)->Array2<f64>
     }
     res_e
 }
+
+pub fn get_abs(res:&Array2<f64>)->Array2<f64>
+{
+    let row_num;
+    let col_num;
+    (row_num,col_num)=res.dim();
+    let mut res_abs=Array::zeros((row_num as usize,col_num as usize));
+    for i in 0..row_num
+    {
+        for j in 0..col_num
+        {
+            res_abs[[i,j]] = res[[i,j]].abs();
+        }
+    }
+    res_abs
+}
+
+// pub fn b_broad(b:&Array2<f64>,row_num:usize,col_num:usize)->Array2<f64>
+// {
+//     let mut resb=Array::zeros((row_num,col_num));
+//     for i in 0..row_num
+//     {
+//         for j in 0..row_num
+//         {
+//             resb[[i,j]]=b[[i,1]];
+//         }
+//     }
+//
+//     resb
+// }

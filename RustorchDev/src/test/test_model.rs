@@ -20,27 +20,49 @@ pub fn get_train_data()//->Option<(Array2<f64>, Array2<f64>)>
     //println!("{} {}",x_train[[9999,0]],x_train[[9999,1]]);
     //println!("{}",y_train[[9999,0]]);
 
+    let n=2;
+    let h1=20;
+    //定义线性层
+    let mut temp_linear=Linear::new(n,h1,0.0);
+    //定义softmax层
+    let mut temp_softmax=Softmax::new(h1,8,0.00001);
 
-    let mut temp_softmax=Softmax::new(2,8,0.0);
-    //let mut temp_linear=Linear::new();
 
     let lr=1e-3;
     for i in 0..100
     {
-        let tloss=temp_softmax.loss(&x_train, &y_train);
-        println!("{} {}",i,tloss);
-        if let Some((dx,dw))=temp_softmax.back()
+        let tlres=temp_linear.forward(&x_train);
+        let mut tly:Array2<f64>;
+        let mut tlregloss=0.0;
+        match tlres
         {
-            if i==99
-            {
-                println!("e打印结果为:");
-                temp_softmax.printw();
+                Some((y,regloss))=>
+                {
+                    tly=y;
+                    tlregloss=regloss
+                }
+                None=>{
+                    eprintln!("tlres returned None, skipping iteration");
+                    continue; // 跳过本次循环
+                }
+        }
+        let tsres=temp_softmax.loss(&tly,&y_train)+tlregloss;
+        println!("{} {}",i,tsres);
+        let mut tdx:Array2<f64>;
+        let mut tdw:Array2<f64>;
+        match temp_softmax.back()
+        {
+            Some((dx,dw))=>
+                {
+                    tdx = dx;
+                    tdw = dw;
+                }
+            None=>{
+                eprintln!("tdx and tdw returned None, skipping iteration");
+                continue; // 跳过本次循环
             }
         }
-        else 
-        {
-            println!("梯度为空");  
-        }
+        temp_linear.back(&tdx);
 
     }
 

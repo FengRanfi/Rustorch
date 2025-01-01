@@ -79,7 +79,7 @@ impl Linear
     {
         let dist = Uniform::new(-1.0, 1.0);
         let w = Array::random((row_num as usize, col_num as usize), dist);
-        let b=Array::zeros((row_num as usize,1));
+        let b=Array::zeros((1,col_num as usize));
         Linear{
             w:w,
             b:b,
@@ -95,6 +95,8 @@ impl Linear
         // x (n,r) w(r,c)    return y (n,c)
         self.cache=Some(x.clone());
         let mut regloss=(&self.w*&self.w).sum()*&self.reg;
+        //let b_broadcasted = self.b.broadcast((self.row_num as usize, self.row_num as usize)).unwrap().to_owned();
+
         let y=&x.dot(&self.w)+&self.b;
         Some((y,regloss))
     }
@@ -111,7 +113,8 @@ impl Linear
             dw=dw+2.0*&self.reg*&self.w;
             let dx=dy.dot(&self.w.t());
             let db=dy.sum_axis(Axis(1)).into_shape((a,1)).unwrap();
-            self.w=&self.w-&dw;
+            self.w=&self.w-0.00001*&dw;
+            self.b=&self.b-0.00001*&db;
             Some((dx,dw,db))
         }
         else 

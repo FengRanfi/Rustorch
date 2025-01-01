@@ -139,9 +139,10 @@ impl Softmax
             //println!("{:#?}",x);
             //println!("{:#?}",&self.w);
             //println!("{:#?}",dres);
+            //let abs_w=func_add::get_abs(&self.w);
             let dw=x.t().dot(res_score)+2.0*&self.reg*&self.w;
             let dx=dres.dot(&self.w.t());
-            self.w=&self.w-0.001*&dw;
+            self.w=&self.w-0.00001*&dw;
             Some((dx,dw))
         } else {
             println!("Cache is not initialized.");
