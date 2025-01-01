@@ -30,22 +30,29 @@ impl Linear
         }
     }
 
-    pub fn forward(&mut self,x: &Array2<f64>)->Array2<f64>
+    pub fn forward(&mut self,x: &Array2<f64>)->Option<(Array2<f64>,f64)>
     {
         // x (n,r) w(r,c)    return y (n,c)
         self.cache=Some(x.clone());
-        x.dot(&self.w)+&self.b
+        let mut regloss=(&self.w*&self.w).sum()*&self.reg;
+        let y=&x.dot(&self.w)+&self.b;
+        Some((y,regloss))
     }
 
-    pub fn back(&mut self,dy: &Array2<f64>)-> Option<(Array2<f64>, Array2<f64>)>
+    pub fn back(&mut self,dy: &Array2<f64>)-> Option<(Array2<f64>, Array2<f64>,Array2<f64>)>
     {  //dy (n,c)  x (n,r) w(r,c)
         if let Some(x)=&self.cache 
         {
             
-            let dw=x.t().dot(dy);
+            let mut dw=x.t().dot(dy);
+            let a;
+            let b;
+            (a,b)=dy.dim();
+            dw=dw+2.0*&self.reg*&self.w;
             let dx=dy.dot(&self.w.t());
+            let db=dy.sum_axis(Axis(1)).into_shape((a,1)).unwrap();
             self.w=&self.w-&dw;
-            Some((dx,dw))
+            Some((dx,dw,db))
         }
         else 
         {

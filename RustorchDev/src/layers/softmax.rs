@@ -62,7 +62,7 @@ impl Softmax
         //println!("{:#?}",get_y_score);
         let mut loss=-get_y_score.sum()/(n as f64);
         self.cache=Some((y_oh,res_score,x.clone()));
-        loss=loss+(&self.w*&self.w).sum()*&self.reg;
+        loss=loss+(&self.w*&self.w).sum()*self.reg;
         loss
     }
 
@@ -70,6 +70,7 @@ impl Softmax
     pub fn back(&mut self)-> Option<(Array2<f64>, Array2<f64>)>
     {
         if let Some((y_oh, res_score, x)) = &self.cache {
+
             let dres = res_score - y_oh;
             // x (n,r)  w (r,c)   dres (n,c)
             //println!("{:#?}",x);
