@@ -1,4 +1,5 @@
 use ndarray::prelude::*;
+use crate::layers::linear::Linear;
 use crate::layers::softmax::Softmax;
 
 use super::super::layers::softmax;
@@ -19,8 +20,10 @@ pub fn get_train_data()//->Option<(Array2<f64>, Array2<f64>)>
     //println!("{} {}",x_train[[9999,0]],x_train[[9999,1]]);
     //println!("{}",y_train[[9999,0]]);
 
-    
+
     let mut temp_softmax=Softmax::new(2,8,0.0);
+    //let mut temp_linear=Linear::new();
+
     let lr=1e-3;
     for i in 0..100
     {
